@@ -1,0 +1,3 @@
+description="BGZF gzip-compatible compressed files with random access capabilities"
+archive(byte)="bgzf.cma"
+archive(native)="bgzf.cmxa"

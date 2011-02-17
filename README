@@ -1,0 +1,11 @@
+ocaml-bgzf
+OCaml library for BGZF, a gunzip-compatible format allowing random access to the uncompressed data
+Author: Mike Lin http://www.broadinstitute.org/~mlin
+License: LGPL
+Requires: findlib
+
+Based on code from:
+samtools (http://samtools.sourceforge.net/)
+CamlZip (http://forge.ocamlcore.org/projects/camlzip/)
+
+According to samtools documentation, the BGZF format was designed and implemented by Bob Handsaker.
