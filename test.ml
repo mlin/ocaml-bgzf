@@ -27,7 +27,7 @@ let write_bgzf () =
 let index_chunks fn =
 	let index = Array.make chunks (Int64.of_int (-1)) in
 	let chan = BGZF.open_in fn in
-	let buf = String.create one_megabyte in
+	let buf = String.create (magic_word_length+one_megabyte) in
 	for i = 1 to chunks do
 		index.(i-1) <- BGZF.tell chan;
 		BGZF.really_input chan buf 0 (magic_word_length+one_megabyte);
@@ -48,6 +48,15 @@ let access_chunks fn index =
 	done;
 	BGZF.close_in chan
 
+let verify_eof fn =
+	let chan = BGZF.open_in fn in
+	let buf = String.create (magic_word_length+one_megabyte) in
+	for i = 1 to chunks do
+		BGZF.really_input chan buf 0 (magic_word_length+one_megabyte)
+	done;
+	(try BGZF.really_input chan buf 0 1; assert false with End_of_file -> ());
+	(try BGZF.really_input chan buf 0 (magic_word_length+one_megabyte); assert false with End_of_file -> ())
+
 let main () =
 	printf "writing test BGZF file..."; flush stdout;
 	let fn = write_bgzf () in
@@ -60,12 +69,17 @@ let main () =
 			(100.0 *. (1.0 -. (float deflated_sz /. (float original_sz))));
 		printf "indexing...\n"; flush stdout;
 		let index = index_chunks fn in
-(*		for i = 1 to chunks do
+		(* for i = 1 to chunks do
 			printf "%2d...%s\n" i (Int64.to_string index.(i-1))
 		done; *)
 		flush stdout;
+		
 		printf "verifying random access...\n"; flush stdout;
 		for i = 1 to 4 do access_chunks fn index done;
+		
+		printf "verifying End_of_file...\n"; flush stdout;
+		verify_eof fn;
+		
 		Sys.remove fn;
 		printf "OK!\n"
 	with exn -> begin

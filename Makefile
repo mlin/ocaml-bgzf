@@ -12,13 +12,14 @@ ZLIB_INCLUDE=/usr/include
 ###
 
 OCAMLC=ocamlc -g
-OCAMLOPT=ocamlopt
+OCAMLOPT=ocamlopt -g
 OCAMLDEP=ocamldep
 OCAMLMKLIB=ocamlmklib
-
-OBJS=BGZF.cmo bgzf_stubs.o bgzf.o
+OCAMLFIND=ocamlfind
 
 ###
+
+OBJS=BGZF.cmo bgzf_stubs.o bgzf.o
 
 all: bgzip BGZF.cmi bgzf.cma bgzf.cmxa
 
@@ -32,10 +33,10 @@ bgzip: bgzip.o bgzf.o
 	$(CC) $(CFLAGS) -o $@ bgzf.o bgzip.o $(ZLIB_LIB)
 		
 install: all
-	ocamlfind install bgzf META *.mli *.a *.cmi *.cma *.cmxa $(wildcard *.so)
+	$(OCAMLFIND) install bgzf META *.mli *.a *.cmi *.cma *.cmxa $(wildcard *.so)
 	
 remove:
-	ocamlfind remove bgzf
+	$(OCAMLFIND) remove bgzf
 	
 reinstall:
 	make remove
@@ -45,10 +46,16 @@ test: reinstall
 	ocamlfind ocamlopt -package unix,bgzf -linkpkg -o test test.ml
 	./test
 
+doc: BGZF.mli
+	rm -rf doc
+	mkdir doc
+	ocamldoc -html -d doc BGZF.mli
+
 clean:
 	rm -f *.cm*
 	rm -f *.o *.a *.so
 	rm -f bgzip test
+	rm -rf doc
 
 .SUFFIXES: .mli .ml .cmo .cmi .cmx
 

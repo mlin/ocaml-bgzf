@@ -1,3 +1,3 @@
-description="BGZF gzip-compatible compressed files with random access capabilities"
+description="a gunzip-compatible format allowing random access to the uncompressed data"
 archive(byte)="bgzf.cma"
 archive(native)="bgzf.cmxa"
