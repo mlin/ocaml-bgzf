@@ -23,7 +23,12 @@
 Open a BGZF-compressed file for reading<br>
 </div>
 <pre><span id="VALclose_in"><span class="keyword">val</span> close_in</span> : <code class="type"><a href="BGZF.html#TYPEin_channel">in_channel</a> -> unit</code></pre><div class="info">
-Close the file immediately. Otherwise it will be taken care of when the <code class="code">in_channel</code> is finalized.<br>
+Close the file immediately. Otherwise it will be taken care of when the <code class="code">in_channel</code> is
+finalized by the garbage collector.<br>
+</div>
+<pre><span id="VALinput_char"><span class="keyword">val</span> input_char</span> : <code class="type"><a href="BGZF.html#TYPEin_channel">in_channel</a> -> char</code></pre><div class="info">
+Uncompress one character from the given channel, and return it.<br>
+<b>Raises</b> <code>End_of_file</code> if no more compressed data is available.<br>
 </div>
 <pre><span id="VALinput"><span class="keyword">val</span> input</span> : <code class="type"><a href="BGZF.html#TYPEin_channel">in_channel</a> -> string -> int -> int -> int</code></pre><div class="info">
 <code class="code">input ic buf pos len</code> uncompresses up to <code class="code">len</code> characters from the given channel <code class="code">ic</code>, storing
