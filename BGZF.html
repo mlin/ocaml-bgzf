@@ -1,0 +1,71 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type">
+<link rel="Start" href="index.html">
+<link rel="Up" href="index.html">
+<link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of values" rel=Appendix href="index_values.html">
+<link title="Index of modules" rel=Appendix href="index_modules.html">
+<link title="BGZF" rel="Chapter" href="BGZF.html"><title>BGZF</title>
+</head>
+<body>
+<div class="navbar">&nbsp;<a href="index.html">Up</a>
+&nbsp;</div>
+<center><h1>Module <a href="type_BGZF.html">BGZF</a></h1></center>
+<br>
+<pre><span class="keyword">module</span> BGZF: <code class="code">sig</code> <a href="BGZF.html">..</a> <code class="code">end</code></pre>A gunzip-compatible format allowing random access to the uncompressed data<br>
+<hr width="100%">
+<pre><span id="TYPEin_channel"><span class="keyword">type</span> <code class="type"></code>in_channel</span> </pre>
+
+<pre><span id="VALopen_in"><span class="keyword">val</span> open_in</span> : <code class="type">string -> <a href="BGZF.html#TYPEin_channel">in_channel</a></code></pre><div class="info">
+Open a BGZF-compressed file for reading<br>
+</div>
+<pre><span id="VALclose_in"><span class="keyword">val</span> close_in</span> : <code class="type"><a href="BGZF.html#TYPEin_channel">in_channel</a> -> unit</code></pre><div class="info">
+Close the file immediately. Otherwise it will be taken care of when the <code class="code">in_channel</code> is finalized.<br>
+</div>
+<pre><span id="VALinput"><span class="keyword">val</span> input</span> : <code class="type"><a href="BGZF.html#TYPEin_channel">in_channel</a> -> string -> int -> int -> int</code></pre><div class="info">
+<code class="code">input ic buf pos len</code> uncompresses up to <code class="code">len</code> characters from the given channel <code class="code">ic</code>, storing
+them in string <code class="code">buf</code>, starting at character number <code class="code">pos</code>. It returns the actual number of characters
+read, between 0 and <code class="code">len</code> (inclusive).<br>
+<b>Returns</b> A return value of 0 means that the end of file was reached. A return value between 0 and
+<code class="code">len</code> exclusive means that not all requested <code class="code">len</code> characters were read, either because no more
+characters were available at that time, or because the implementation found it convenient to do a
+partial read; <code class="code">input</code> must be called again to read the remaining characters, if desired.<br>
+</div>
+<pre><span id="VALreally_input"><span class="keyword">val</span> really_input</span> : <code class="type"><a href="BGZF.html#TYPEin_channel">in_channel</a> -> string -> int -> int -> unit</code></pre><div class="info">
+<code class="code">really_input ic buf pos len</code> uncompresses <code class="code">len</code> characters from the given channel, storing them
+in string <code class="code">buf</code>, starting at character number <code class="code">pos</code>.<br>
+<b>Raises</b> <code>End_of_file</code> if fewer than <code class="code">len</code> characters can be read.<br>
+</div>
+<pre><span id="TYPEpos"><span class="keyword">type</span> <code class="type"></code>pos</span> = <code class="type">Int64.t</code> </pre>
+<div class="info">
+The type of positions in the compressed data stream.
+<p>
+
+<b>IMPORTANT</b>: positions should be treated as opaque values. You can <b>not</b> construct positions <i>ab initio</i> nor perform any arithmetic on them. They are revealed as <code class="code">int64</code>'s only to facilitate
+serialization and deserialization. 
+<p>
+
+To get the 1,000,000th byte of a file, you would have to have previously opened the file from the
+beginning, read the first 999,999 bytes, and then recorded the position using <code class="code">BGZF.tell</code>. You can
+then <code class="code">seek</code> to this position to get the desired data. More generally, you need to index the BGZF
+file in advance by completely passing through the data and recording positions that will be required
+in the future. The positions are constant for a given BGZF file and version of the library.<br>
+</div>
+
+<pre><span id="VALtell"><span class="keyword">val</span> tell</span> : <code class="type"><a href="BGZF.html#TYPEin_channel">in_channel</a> -> <a href="BGZF.html#TYPEpos">pos</a></code></pre><div class="info">
+Return the current position in the file. Again, no interpetation of the value should be made,
+other than a subsequent call to <code class="code">seek</code> to position the file at the same point.<br>
+</div>
+<pre><span id="VALseek"><span class="keyword">val</span> seek</span> : <code class="type"><a href="BGZF.html#TYPEin_channel">in_channel</a> -> <a href="BGZF.html#TYPEpos">pos</a> -> unit</code></pre><div class="info">
+Set the file to read from the location specified by pos, which must be a value previously
+returned by <code class="code">tell</code> for this file (but not necessarily one returned by this channel instance).<br>
+</div>
+<pre><span id="VALset_cache_size"><span class="keyword">val</span> set_cache_size</span> : <code class="type"><a href="BGZF.html#TYPEin_channel">in_channel</a> -> int -> unit</code></pre><div class="info">
+Set the maximum number of uncompressed bytes to cache, in order to speed up successive <code class="code">seek</code>
+and <code class="code">input</code> operations from nearby positions. The cache size is 0 by default. A cache size of about
+8 megabytes is suggested for frequent random access.<br>
+</div>
+</body></html>

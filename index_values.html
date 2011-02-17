@@ -1,0 +1,61 @@
+<html>
+<head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type">
+<link rel="Start" href="index.html">
+<link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of values" rel=Appendix href="index_values.html">
+<link title="Index of modules" rel=Appendix href="index_modules.html">
+<link title="BGZF" rel="Chapter" href="BGZF.html"><title>Index of values</title>
+</head>
+<body>
+<center><h1>Index of values</h1></center>
+<table>
+<tr><td align="left"><br>C</td></tr>
+<tr><td><a href="BGZF.html#VALclose_in">close_in</a> [<a href="BGZF.html">BGZF</a>]</td>
+<td><div class="info">
+Close the file immediately.
+</div>
+</td></tr>
+<tr><td align="left"><br>I</td></tr>
+<tr><td><a href="BGZF.html#VALinput">input</a> [<a href="BGZF.html">BGZF</a>]</td>
+<td><div class="info">
+<code class="code">input ic buf pos len</code> uncompresses up to <code class="code">len</code> characters from the given channel <code class="code">ic</code>, storing
+them in string <code class="code">buf</code>, starting at character number <code class="code">pos</code>.
+</div>
+</td></tr>
+<tr><td align="left"><br>O</td></tr>
+<tr><td><a href="BGZF.html#VALopen_in">open_in</a> [<a href="BGZF.html">BGZF</a>]</td>
+<td><div class="info">
+Open a BGZF-compressed file for reading
+</div>
+</td></tr>
+<tr><td align="left"><br>R</td></tr>
+<tr><td><a href="BGZF.html#VALreally_input">really_input</a> [<a href="BGZF.html">BGZF</a>]</td>
+<td><div class="info">
+<code class="code">really_input ic buf pos len</code> uncompresses <code class="code">len</code> characters from the given channel, storing them
+in string <code class="code">buf</code>, starting at character number <code class="code">pos</code>.
+</div>
+</td></tr>
+<tr><td align="left"><br>S</td></tr>
+<tr><td><a href="BGZF.html#VALseek">seek</a> [<a href="BGZF.html">BGZF</a>]</td>
+<td><div class="info">
+Set the file to read from the location specified by pos, which must be a value previously
+returned by <code class="code">tell</code> for this file (but not necessarily one returned by this channel instance).
+</div>
+</td></tr>
+<tr><td><a href="BGZF.html#VALset_cache_size">set_cache_size</a> [<a href="BGZF.html">BGZF</a>]</td>
+<td><div class="info">
+Set the maximum number of uncompressed bytes to cache, in order to speed up successive <code class="code">seek</code>
+and <code class="code">input</code> operations from nearby positions.
+</div>
+</td></tr>
+<tr><td align="left"><br>T</td></tr>
+<tr><td><a href="BGZF.html#VALtell">tell</a> [<a href="BGZF.html">BGZF</a>]</td>
+<td><div class="info">
+Return the current position in the file.
+</div>
+</td></tr>
+</table><br>
+</body>
+</html>
