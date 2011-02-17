@@ -53,6 +53,11 @@ value caml_bgzf_input(value bgzf, value buf, value ofs, value len) {
 	CAMLreturn(Val_long(bgzf_read(BGZF_val(bgzf),&Byte_u(buf,Long_val(ofs)),Int_val(len))));
 }
 
+value caml_bgzf_getc(value bgzf) {
+	CAMLparam1(bgzf);
+	CAMLreturn(Val_int(bgzf_getc(BGZF_val(bgzf))));
+}
+
 value caml_bgzf_tell(value bgzf) {
 	CAMLparam1(bgzf);
 	CAMLreturn(copy_int64(bgzf_tell(BGZF_val(bgzf))));

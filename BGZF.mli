@@ -6,7 +6,13 @@ val open_in : string -> in_channel
 (** Open a BGZF-compressed file for reading *)
 
 val close_in : in_channel -> unit
-(** Close the file immediately. Otherwise it will be taken care of when the [in_channel] is finalized. *)
+(** Close the file immediately. Otherwise it will be taken care of when the [in_channel] is
+finalized by the garbage collector. *)
+
+val input_char : in_channel -> char
+(** Uncompress one character from the given channel, and return it.
+
+@raise End_of_file if no more compressed data is available. *)
 
 val input : in_channel -> string -> int -> int -> int
 (** [input ic buf pos len] uncompresses up to [len] characters from the given channel [ic], storing

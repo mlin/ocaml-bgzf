@@ -42,9 +42,14 @@ let access_chunks fn index =
 	for i = 1 to chunks*25 do
 		let which_chunk = 1 + Random.int chunks in
 		BGZF.seek chan index.(which_chunk-1);
-		BGZF.really_input chan buf 0 magic_word_length;
+		let char_by_char = Random.bool () in
+		if char_by_char then
+			for j = 0 to magic_word_length-1 do
+				buf.[j] <- BGZF.input_char chan
+			done
+		else BGZF.really_input chan buf 0 magic_word_length;
 		if buf <> magic_word which_chunk then
-			failwith (sprintf "expected \"%s\", got \"%s\"" (magic_word which_chunk) buf)
+			failwith (sprintf "expected \"%s\", got \"%s\" (%s)" (magic_word which_chunk) buf (if char_by_char then "input_char" else "really_input"))
 	done;
 	BGZF.close_in chan
 
@@ -55,7 +60,8 @@ let verify_eof fn =
 		BGZF.really_input chan buf 0 (magic_word_length+one_megabyte)
 	done;
 	(try BGZF.really_input chan buf 0 1; assert false with End_of_file -> ());
-	(try BGZF.really_input chan buf 0 (magic_word_length+one_megabyte); assert false with End_of_file -> ())
+	(try BGZF.really_input chan buf 0 (magic_word_length+one_megabyte); assert false with End_of_file -> ());
+	(try ignore (BGZF.input_char chan); assert false with End_of_file -> ())
 
 let main () =
 	printf "writing test BGZF file..."; flush stdout;

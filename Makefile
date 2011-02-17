@@ -42,7 +42,7 @@ reinstall:
 	make remove
 	make install
 
-test: reinstall
+test: test.ml
 	ocamlfind ocamlopt -package unix,bgzf -linkpkg -o test test.ml
 	./test
 

@@ -19,6 +19,14 @@ let open_in fn =
 external set_cache_size_stub : in_channel_stub -> int -> unit = "caml_bgzf_set_cache_size"
 let set_cache_size chan sz = if chan.is_open then set_cache_size_stub chan.stub sz
 
+external getc : in_channel_stub -> int = "caml_bgzf_getc"
+let input_char chan =
+	if not chan.is_open then invalid_arg "BGZF.input_char";
+	match getc chan.stub with
+		| (-1) -> raise End_of_file
+		| ch when ch >= 0 && ch <= 255 -> Char.chr ch
+		| _ -> failwith "BGZF.input_char"
+
 external input_stub : in_channel_stub -> string -> int -> int -> int = "caml_bgzf_input"
 let input chan buf ofs len =
 	if not chan.is_open || ofs < 0 || ofs+len > String.length buf then invalid_arg "BGZF.input";
